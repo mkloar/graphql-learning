@@ -25,15 +25,9 @@ const createUsersTable = () => {
 }
 
 const queryAllUsers = async() => {
-    const query = "Select * from user"
+    let result = await db.select().table('user')
 
-    let data = []
-
-    await database.all(query, (err, row) => {
-        data = row
-    })
-
-    return data
+    return result
 }
 
 const resolveCreateUser = async(root, {name, mail}) => {
@@ -47,6 +41,8 @@ const resolveCreateUser = async(root, {name, mail}) => {
     return newUser
 }
 
+
+createUsersTable()
 
 module.exports = {
     createUsersTable,
