@@ -1,5 +1,5 @@
 const graphql = require('graphql')
-const { queryAllUsers, createUsersTable } = require('../db/user')
+const { queryAllUsers, createUsersTable, resolveCreateUser } = require('../db/user')
 
 createUsersTable()
 
@@ -17,25 +17,37 @@ const queryType = new graphql.GraphQLObjectType({
     name: 'Query',
     fields: {
         // query all
-        Posts: {
+        Users: {
             type: graphql.GraphQLList(UserType),
-            resolve: (root, args, context, info) => {
-                return new Promise((resolve, reject) => {
-                    // raw SQLite query to select from table
-                    queryAllUsers().then((err, rows) => {
-                        if (err) {
-                            reject([])
-                        }
-                        resolve(rows)
-                    })
-                });
-            }
+            resolve: queryAllUsers
+        }
+    }
+})
+
+const mutationType = new graphql.GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+        // query all
+        createUser: {
+            //type of object to return after create in SQLite
+            type: UserType,
+            //argument of mutation creactePost to get from request
+            args: {
+                name: {
+                    type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+                },
+                mail:{
+                    type: new graphql.GraphQLNonNull(graphql.GraphQLString)
+                }
+            },
+            resolve: resolveCreateUser
         }
     }
 })
 
 const schema = new graphql.GraphQLSchema({
-    query: queryType
+    query: queryType,
+    mutation: mutationType
 })
 
 module.exports = {
