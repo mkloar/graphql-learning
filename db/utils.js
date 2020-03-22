@@ -1,4 +1,4 @@
-const DATABASE_NAME = "./learning-graphql.db"
+const DATABASE_NAME = "./db/learning-graphql.db"
 
 
 module.exports = {

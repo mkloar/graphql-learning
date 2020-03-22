@@ -1,17 +1,6 @@
-const sqlite3 = require('sqlite3').verbose()
-const { DATABASE_NAME } = require('./utils')
-const knex = require('knex')
+const { db } = require('./index')
 
-const database = new sqlite3.Database(DATABASE_NAME)
-
-const db = knex({
-    client: 'sqlite3',
-    connection: {
-      filename: DATABASE_NAME
-    }
-})
-
-const createUsersTable = () => {
+const createUsersTable = async() => {
     const query = `
         CREATE TABLE IF NOT EXISTS user (
             id integer PRIMARY KEY,
@@ -21,7 +10,7 @@ const createUsersTable = () => {
         )
     `;
 
-    return database.run(query)
+    await db.raw(query)
 }
 
 const queryAllUsers = async() => {
