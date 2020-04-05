@@ -1,6 +1,8 @@
 const graphql = require('graphql')
 const { UserType } = require('./models/user')
 const { queryAllUsers, resolveCreateUser } = require('../db/user')
+const { StatesOutcomeType } = require('./models/states-outcome')
+const { queryAllStateOutcomes } = require('../db/search')
 
 
 const resolvers = new graphql.GraphQLObjectType({
@@ -10,6 +12,10 @@ const resolvers = new graphql.GraphQLObjectType({
         Users: {
             type: graphql.GraphQLList(UserType),
             resolve: queryAllUsers
+        },
+        StatesOutcome: {
+            type: graphql.GraphQLList(StatesOutcomeType),
+            resolve: queryAllStateOutcomes
         }
     }
 })
